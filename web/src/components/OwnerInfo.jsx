@@ -12,17 +12,19 @@ export default function OwnerInfo({address, size = "sm"}) {
         <div className={`relative ${size === "lg" ? "w-16 h-16" : "w-8 h-8"}`}>
           <Avatar address={address} />
         </div>
-        <a
-          href={`https://flowscan.org/account/${currentUser.addr}`}
-          target="_blank"
-          className={`ml-4 font-mono text-xs ${
-            currentUser?.addr === address
-              ? "text-green-dark"
-              : "text-gray-darkest"
-          }`}
-        >
-          {address}
-        </a>
+        {currentUser?.addr && (
+          <a
+            href={`https://testnet.flowscan.org/account/${currentUser.addr}`}
+            target="_blank"
+            className={`ml-4 font-mono text-xs ${
+              currentUser?.addr === address
+                ? "text-green-dark"
+                : "text-gray-darkest"
+            }`}
+          >
+            {address}
+          </a>
+        )}
       </a>
     </Link>
   )
