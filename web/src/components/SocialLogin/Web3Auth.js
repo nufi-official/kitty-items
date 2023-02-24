@@ -1,5 +1,5 @@
 import {Web3AuthCore} from "@web3auth/core"
-import {OpenloginAdapter} from "@web3auth/openLogin-adapter"
+import {OpenloginAdapter} from "@web3auth/openlogin-adapter"
 import {CHAIN_NAMESPACES, WALLET_ADAPTERS} from "@web3auth/base"
 import {entropyToMnemonic} from "bip39"
 
