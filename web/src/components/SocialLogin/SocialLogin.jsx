@@ -1,6 +1,7 @@
 import {useEffect} from "react"
+import {WalletUtils, account} from "@onflow/fcl"
 import {web3AuthConnection} from "./Web3Auth.js"
-import {getAccountData} from "./flowAccount.js"
+import {getAccountData, signTxMessage} from "./flowAccount.js"
 
 const messageTypes = [
   "FCL:VIEW:READY",
@@ -9,10 +10,10 @@ const messageTypes = [
   "FCL:VIEW:CLOSE",
 ]
 
+const ENDPOINT = "ext:RandWeb3AuthUniqueString"
 const VERSION = "1.0.0"
 
 const getServices = () => {
-  const ENDPOINT = "ext:RandWeb3AuthUniqueString"
   const providers = [
     {
       id: "google",
@@ -54,7 +55,7 @@ const getServices = () => {
       description: "Sign in with Twitter via Web3 auth",
       website: "",
     },
-    // Avoid more that 4 as the default UI is by default not scrollable
+    // Avoid more than 4 as the default UI is by default not scrollable
     /*{
       id: "github",
       f_type: "ServiceProvider",
@@ -87,6 +88,7 @@ const getServices = () => {
       provider,
     })
   }
+
   return services
 }
 
@@ -106,6 +108,9 @@ const isExtensionServiceInitiationMessage = msg => {
 
 const isMessage = msg => messageTypes.includes(msg?.type)
 
+const isSignable = msg =>
+  typeof msg === "object" && msg.f_vsn === "1.0.1" && msg.f_type === "Signable"
+
 export default function SocialLogin() {
   useEffect(() => {
     if (Array.isArray(window.fcl_extensions)) {
@@ -117,22 +122,33 @@ export default function SocialLogin() {
     window.addEventListener("message", async e => {
       const msg = e.data
       const response = await (async () => {
+        console.log("received message:", msg)
         if (isExtensionServiceInitiationMessage(msg)) {
-          console.log("received message:", msg)
+          if (!msg.service.endpoint.includes(ENDPOINT)) {
+            return null
+          }
 
-          const provider = msg?.service?.provider?.id
+          window.provider = msg?.service?.provider?.id
+
+          return {type: "FCL:VIEW:READY"}
+        } else if (isMessage(msg) && msg.type === "FCL:VIEW:READY:RESPONSE") {
+          const provider = window.provider
 
           if (provider) {
+            console.log({provider})
             try {
               const web3AuthResponse = await web3AuthConnection.login(provider)
               console.log("web3AuthResponse", web3AuthResponse)
+              const {mnemonic} = web3AuthResponse
 
+              // TODO remove temp mnemonic assignment
               // const mnemonic =
               //   "attitude state code amount spirit walnut legend pet window abstract swift basket tissue today topic"
-              const {mnemonic} = web3AuthResponse
 
               const accountData = await getAccountData(mnemonic)
               console.log("getAccountData", {accountData})
+
+              localStorage.setItem("accountData", JSON.stringify(accountData))
 
               const selectedService = services.find(
                 s => s.provider.id === provider
@@ -161,6 +177,21 @@ export default function SocialLogin() {
                         address: accountData.address,
                       },
                     },
+                    {
+                      type: "authz",
+                      f_type: "Service",
+                      f_vsn: VERSION,
+                      uid: "web3#authz",
+                      endpoint: ENDPOINT + "authz",
+                      method: "EXT/RPC",
+                      id: accountData.address,
+                      identity: {
+                        f_type: "Identity",
+                        f_vsn: VERSION,
+                        address: accountData.address,
+                        keyId: 0,
+                      },
+                    },
                   ],
                 },
               }
@@ -169,10 +200,50 @@ export default function SocialLogin() {
               return null
             }
           }
-        } else if (isMessage(msg) && msg.type === "FCL:VIEW:READY:RESPONSE") {
+
+          if (isSignable(msg?.body)) {
+            const accountData = JSON.parse(
+              await localStorage.getItem("accountData")
+            )
+
+            try {
+              const message = WalletUtils.encodeMessageFromSignable(
+                msg.body,
+                accountData.address
+              )
+              const signature = await signTxMessage(
+                message,
+                accountData.privateKey
+              )
+
+              return {
+                type: "FCL:VIEW:RESPONSE",
+                f_type: "PollingResponse",
+                f_vsn: VERSION,
+                status: "APPROVED",
+                reason: null,
+                data: {
+                  f_type: "CompositeSignature",
+                  f_vsn: VERSION,
+                  addr: accountData.address,
+                  keyId: 0,
+                  signature,
+                },
+              }
+            } catch (e) {
+              console.log("AUTHZ DECLINED", e)
+              return {
+                type: "FCL:VIEW:RESPONSE",
+                f_type: "PollingResponse",
+                f_vsn: VERSION,
+                status: "DECLINED",
+                reason: "Declined.",
+              }
+            }
+          }
+        } else {
           return null
         }
-        return null
       })()
       if (response != null) {
         window.postMessage(response)

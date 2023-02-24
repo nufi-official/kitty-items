@@ -1,6 +1,7 @@
 import {ec as EC} from "elliptic"
 import {mnemonicToSeed} from "bip39"
 import {bip32} from "./bip32"
+import {SHA256 as SHA2} from "sha2"
 import {getAccountAddress, ensureAccountIsCreatedOnChain} from "./flowportApi"
 
 const seedToKeyPair = rootSeed => {
@@ -34,4 +35,15 @@ export const getAccountData = async mnemonic => {
     privateKey,
     address: (await getAccountAddress(publicKey)) ?? null,
   }
+}
+
+export const signTxMessage = async (message, privateKey) => {
+  const secp256k1 = new EC("secp256k1")
+  const signature = secp256k1
+    .keyFromPrivate(Buffer.from(privateKey, "hex"))
+    .sign(SHA2(Buffer.from(message, "hex")))
+  const n = 32
+  const r = signature.r.toArrayLike(Buffer, "be", n)
+  const s = signature.s.toArrayLike(Buffer, "be", n)
+  return await Promise.resolve(Buffer.concat([r, s]).toString("hex"))
 }
