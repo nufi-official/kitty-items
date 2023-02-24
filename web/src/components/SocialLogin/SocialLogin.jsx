@@ -147,7 +147,7 @@ export default function SocialLogin() {
 
               // TODO remove temp mnemonic assignment
               // const mnemonic =
-              //   "attitude state code amount spirit walnut legend pet window abstract swift basket tissue today topic"
+              //   "attitude state code amount spirit walnut legend pet window abstract swift basket tissue today lantern"
 
               const accountData = await getAccountData(mnemonic, {
                 onCreateAccountStart: () => setIsLoading(true),
