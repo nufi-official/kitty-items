@@ -59,7 +59,7 @@ export default function Header() {
                 <div style={{marginRight: 12}}>
                   <div className={`ml-4 font-mono text-xs`}>My address:</div>
                   <a
-                    href={`https://flowscan.org/account/${currentUser.addr}`}
+                    href={`https://testnet.flowscan.org/account/${currentUser.addr}`}
                     target="_blank"
                   >
                     <div

@@ -14,7 +14,7 @@ export default function OwnerInfo({address, size = "sm"}) {
         </div>
         {currentUser?.addr && (
           <a
-            href={`https://flowscan.org/account/${currentUser.addr}`}
+            href={`https://testnet.flowscan.org/account/${currentUser.addr}`}
             target="_blank"
             className={`ml-4 font-mono text-xs ${
               currentUser?.addr === address
