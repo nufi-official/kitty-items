@@ -12,7 +12,7 @@ const menuItemClasses = active =>
   } hover:bg-green text-sm group flex rounded-md items-center w-full px-2 py-1`
 
 export default function HeaderDropdown() {
-  const {currentUser, setFlashMessage, switchToAdminView} = useAppContext()
+  const {currentUser, setFlashMessage} = useAppContext()
 
   const address = currentUser.addr
 
@@ -32,17 +32,6 @@ export default function HeaderDropdown() {
         >
           <Avatar address={address} />
         </Menu.Button>
-        <button
-          onClick={switchToAdminView}
-          className="flex items-center justify-center h-10 px-5 ml-2 text-sm text-white bg-black rounded-full hover:opacity-80"
-        >
-          Mint NFTs
-          <img
-            src="/images/sliders.svg"
-            alt="Switch to Admin View"
-            className="ml-2"
-          />
-        </button>
         <Transition
           as={Fragment}
           enter="transition ease-out duration-100"

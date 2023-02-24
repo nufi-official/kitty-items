@@ -11,7 +11,8 @@ import TransactionsIndicator from "./Transactions"
 import SocialLogin from "./SocialLogin/SocialLogin"
 
 export default function Header() {
-  const {currentUser} = useAppContext()
+  const {currentUser, switchToAdminView} = useAppContext()
+
   const router = useRouter()
   const logIn = useLogin()
   const isAdminPath = router.pathname === paths.adminMint
@@ -20,29 +21,37 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200">
       <HeaderMessage />
       <div className="flex justify-between py-4 main-container max-w-2">
-        <Link href={paths.root} passHref>
-          <a
-            className="flex items-center hover:opacity-80"
-            data-cy="header-left"
+        <div className="flex items-center">
+          <Link href={paths.root} passHref>
+            <a
+              className="flex items-center hover:opacity-80"
+              data-cy="header-left"
+            >
+              <div className="flex w-12 sm:w-auto">
+                <img
+                  src="/images/kitty-items-logo.svg"
+                  alt="Kitty Items"
+                  width="60"
+                  height="60"
+                />
+              </div>
+              <div className="ml-2 d-flex flex-column">
+                <div className="text-sm font-bold sm:text-2xl lg:text-3xl sm:ml-3 text-gray-darkest">
+                  Kitty Items
+                </div>
+                <div className="text-sm sm:ml-3 text-gray-darkest">
+                  CryptoKitties Sample App
+                </div>
+              </div>
+            </a>
+          </Link>
+          <button
+            onClick={switchToAdminView}
+            className="flex items-center justify-center ml-4 h-10 px-5 ml-2 text-sm text-white bg-black rounded-full hover:opacity-80"
           >
-            <div className="flex w-12 sm:w-auto">
-              <img
-                src="/images/kitty-items-logo.svg"
-                alt="Kitty Items"
-                width="60"
-                height="60"
-              />
-            </div>
-            <div className="ml-2 d-flex flex-column">
-              <div className="text-sm font-bold sm:text-2xl lg:text-3xl sm:ml-3 text-gray-darkest">
-                Kitty Items
-              </div>
-              <div className="text-sm sm:ml-3 text-gray-darkest">
-                CryptoKitties Sample App
-              </div>
-            </div>
-          </a>
-        </Link>
+            Mint NFTs
+          </button>
+        </div>
         <div className="flex items-center" data-cy="header-right">
           {!isAdminPath && (
             <>
