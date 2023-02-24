@@ -36,7 +36,7 @@ class Web3AuthConnection {
     }
 
     const provider = await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
-      mfaLevel: "default", // Pass on the mfa level of your choice: default, optional, mandatory, none
+      mfaLevel: "none", // Pass on the mfa level of your choice: default, optional, mandatory, none
       loginProvider,
     })
 
