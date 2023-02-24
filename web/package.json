@@ -30,6 +30,7 @@
     "bip32": "^3.0.1",
     "bip39": "^3.0.4",
     "elliptic": "^6.5.4",
+    "sha2": "^1.0.2",
     "knex": "^1.0.2",
     "next": "^12.1.0",
     "postcss": "^8.4.8",
@@ -44,7 +45,6 @@
   },
   "devDependencies": {
     "@jjordy/swr-devtools": "^2.0.7",
-    "@next/swc-darwin-arm64": "^13.2.1",
     "cypress": "^8.5.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
