@@ -36,7 +36,7 @@ export default function HeaderDropdown() {
           onClick={switchToAdminView}
           className="flex items-center justify-center h-10 px-5 ml-2 text-sm text-white bg-black rounded-full hover:opacity-80"
         >
-          Admin
+          Mint NFTs
           <img
             src="/images/sliders.svg"
             alt="Switch to Admin View"
@@ -53,9 +53,13 @@ export default function HeaderDropdown() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-50 mt-12 origin-top-right bg-white divide-y divide-gray-200 rounded-md w-44 ring-1 ring-black ring-opacity-10 focus:outline-none">
-            <div className="font-mono text-xs text-center font-bold text-gray-darkest p-1.5">
+            <a
+              href={`https://flowscan.org/account/${currentUser.addr}`}
+              target="_blank"
+              className="font-mono text-xs text-center font-bold text-gray-darkest p-1.5"
+            >
               {address}
-            </div>
+            </a>
             <div className="px-1 py-2">
               <Menu.Item>
                 {({active}) => (
