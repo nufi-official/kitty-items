@@ -59,7 +59,7 @@ transaction(saleItemID: UInt64, saleItemPrice: UFix64) {
             marketplacesCapability: nil, // [Capability<&{FungibleToken.Receiver}>]?
             customID: nil, // String?
             commissionAmount: UFix64(0),
-            expiry: UInt64(getCurrentBlock().timestamp) + UInt64(500)
+            expiry: UInt64(getCurrentBlock().timestamp) + UInt64(5000000)
         )
     }
 }

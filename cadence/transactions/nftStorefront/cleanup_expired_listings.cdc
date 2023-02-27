@@ -1,4 +1,4 @@
-import NFTStorefrontV2 from "../contracts/NFTStorefrontV2.cdc"
+import NFTStorefrontV2 from "../../contracts/NFTStorefrontV2.cdc"
 
 /// Transaction to facilitate the cleanup of the expired listings of a given
 /// storefront resource account holder.

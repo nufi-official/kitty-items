@@ -99,7 +99,7 @@ transaction(recipient: Address, kind: UInt8, rarity: UInt8) {
             marketplacesCapability: self.marketplacesCapability.length == 0 ? nil : self.marketplacesCapability,
             customID: nil,
             commissionAmount: UFix64(0),
-            expiry: UInt64(getCurrentBlock().timestamp) + UInt64(500)
+            expiry: UInt64(getCurrentBlock().timestamp) + UInt64(5000000)
         )
     }
 
