@@ -483,6 +483,8 @@ pm2.connect(false, async function (err) {
     args: "run dev",
     watch: false,
     wait_ready: true,
+    autorestart: true,
+    cron_restart: '0 * * * *',
   });
 
   spinner.succeed(chalk.greenBright("API server started"));
@@ -503,7 +505,7 @@ pm2.connect(false, async function (err) {
     args: "run dev",
     watch: false,
     wait_ready: true,
-    autorestart: false,
+    autorestart: true,
   });
 
   spinner.succeed(chalk.greenBright("Storefront web app started"));
