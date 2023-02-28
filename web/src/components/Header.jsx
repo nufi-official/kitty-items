@@ -45,12 +45,24 @@ export default function Header() {
               </div>
             </a>
           </Link>
-          <button
-            onClick={switchToAdminView}
-            className="flex items-center justify-center ml-4 h-10 px-5 ml-2 text-sm text-white bg-black rounded-full hover:opacity-80"
-          >
-            Mint NFTs
-          </button>
+          {!!currentUser && (
+            <div className="hidden lg:flex">
+              <button
+                onClick={switchToAdminView}
+                className="flex items-center justify-center ml-4 h-10 px-5 text-sm text-white bg-black rounded-l-full hover:opacity-80"
+              >
+                Mint NFTs
+              </button>
+
+              <a
+                href="https://testnet-faucet.onflow.org/fund-account"
+                target="blank"
+                className="flex items-center h-10 px-4 text-sm border-2 border-l-0 rounded-r-full"
+              >
+                Get $FLOW
+              </a>
+            </div>
+          )}
         </div>
         <div className="flex items-center" data-cy="header-right">
           {!isAdminPath && (
