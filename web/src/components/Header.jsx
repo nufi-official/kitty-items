@@ -8,13 +8,14 @@ import useAppContext from "src/hooks/useAppContext"
 import useLogin from "src/hooks/useLogin"
 import HeaderMessage from "./HeaderMessage"
 import TransactionsIndicator from "./Transactions"
-import {auth} from "@nufi/fcl-web3auth-plugin"
+import {auth, experimentalLinkAccount} from "@nufi/fcl-web3auth-plugin"
 
 export default function Header() {
   const {currentUser} = useAppContext()
   const router = useRouter()
   const logIn = useLogin()
   const isAdminPath = router.pathname === paths.adminMint
+  const isWeb3AuthLoggedIn = true
 
   return (
     <header className="bg-white border-b border-gray-200">
@@ -56,7 +57,29 @@ export default function Header() {
                 </div>
               )}
               {currentUser ? (
-                <HeaderDropdown />
+                isWeb3AuthLoggedIn ? (
+                  <>
+                    <button
+                      onClick={() =>
+                        experimentalLinkAccount({
+                          linkedAccountName: "Test Name",
+                          linkedAccountDescription: "Test description",
+                          clientExternalURL: "thumbnailURL.com",
+                          clientThumbnailURL: "thumbnailURL.com/img.jpg",
+                          handlerPathSuffix: "TestHandler",
+                          authAccountPathSuffix: "TestAuthAccountCapability",
+                        })
+                      }
+                      className="mr-2 text-sm text-gray-700 sm:text-lg md:text-xl"
+                      data-cy="btn-log-in"
+                    >
+                      Link Account (experimental)
+                    </button>
+                    <HeaderDropdown />
+                  </>
+                ) : (
+                  <HeaderDropdown />
+                )
               ) : (
                 <>
                   <button
