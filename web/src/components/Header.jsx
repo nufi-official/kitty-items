@@ -8,6 +8,7 @@ import useAppContext from "src/hooks/useAppContext"
 import useLogin from "src/hooks/useLogin"
 import HeaderMessage from "./HeaderMessage"
 import TransactionsIndicator from "./Transactions"
+import {auth} from "@nufi/fcl-web3auth-plugin"
 
 export default function Header() {
   const {currentUser} = useAppContext()
@@ -57,13 +58,42 @@ export default function Header() {
               {currentUser ? (
                 <HeaderDropdown />
               ) : (
-                <button
-                  onClick={logIn}
-                  className="mr-2 text-sm text-gray-700 sm:text-lg md:text-xl"
-                  data-cy="btn-log-in"
-                >
-                  Log In
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      auth({
+                        loginProviderWhiteList: [
+                          "google",
+                          "facebook",
+                          "twitter",
+                          "discord",
+                          "linkedin",
+                          "reddit",
+                        ],
+                      })
+                      // Other options are:
+                      // 
+                      // Show all available login options
+                      // auth()
+                      //
+                      // or
+                      //
+                      // log in directly through Google
+                      // authWithProvider('google')
+                    }}
+                    className="mx-1.5 sm:mx-3 text-sm text-gray-700 sm:text-lg md:text-xl"
+                    data-cy="btn-log-in"
+                  >
+                    Log in
+                  </button>
+                  <button
+                    onClick={logIn}
+                    className="mx-1.5 sm:mx-3 text-sm text-gray-700 sm:text-lg md:text-xl"
+                    data-cy="btn-log-in"
+                  >
+                    Connect Wallet
+                  </button>
+                </>
               )}
             </>
           )}
